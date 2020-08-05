@@ -32,9 +32,6 @@ public class SwaggerConfiguration {
     @Value("${keycloak.realm}")
     private String REALM;
 
-    @Value("${keycloak.resource}")
-    private String RESOURCE;
-
     @Value("${swagger.base-package}")
     private String BASEPACKAGE;
 
@@ -42,13 +39,9 @@ public class SwaggerConfiguration {
     @Bean
     public SecurityConfiguration securityConfiguration() {
 
-        Map<String, Object> additionalQueryStringParams=new HashMap<>();
-        additionalQueryStringParams.put("nonce","123456");
-
         return SecurityConfigurationBuilder.builder()
-                .clientId(CLIENT_ID).realm(REALM).appName(RESOURCE)
+                .clientId(CLIENT_ID).realm(REALM).appName(CLIENT_ID)
                 .clientSecret(CLIENT_SECRET)
-                .additionalQueryStringParams(additionalQueryStringParams)
                 .build();
     }
 
@@ -67,13 +60,13 @@ public class SwaggerConfiguration {
 
     private ApiInfo apiInfo() {
         ApiInfo apiInfo = new ApiInfoBuilder()
-                .title ("API Database WS")
-                .description ("Essa é a API responsável por comunicar com o banco de dados e disponibilizar os dados via REST.")
-                /*           .license("Apache License Version 2.0")
+                .title ("Título")
+                .description ("Descrição")
+                           .license("Apache License Version 2.0")
                            .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
-                           .termsOfServiceUrl("/service.html")*/
+                           .termsOfServiceUrl("/service.html")
                 .version("1.0.0")
-                .contact(new Contact("Lucas Gabriel Reis","http://www.spintec.com.br/", "lucas.reis@spintec.com.br"))
+                .contact(new Contact("NOME","URL", "EMAIL"))
                 .build();
 
         return apiInfo;
@@ -93,8 +86,6 @@ public class SwaggerConfiguration {
 
     private List<? extends SecurityScheme> buildSecurityScheme() {
         List<SecurityScheme> lst = new ArrayList<>();
-        // lst.add(new ApiKey("api_key", "X-API-KEY", "header"));
-
         LoginEndpoint login = new LoginEndpointBuilder().url(AUTH_SERVER+"/realms/"+REALM+"/protocol/openid-connect/auth").build();
 
         List<GrantType> gTypes = new ArrayList<>();
